@@ -45,7 +45,7 @@ class ApiController extends Controller
     protected function getFormStep(string $form, string $step, ?array $data = []): string
     {
         $data['authuser'] =  $this->user;
-        return view("$form.$step", ['authuser' => $this->user])->render();
+        return view("$form.$step", $data)->render();
     }
 
     protected function loadUser(Request $request): void
