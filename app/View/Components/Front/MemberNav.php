@@ -46,6 +46,10 @@ class MemberNav extends Component
                 'page.profile'  => 'Profile',
                 'admin.members.list' => 'Members',
                 'admin.settings' => 'Settings',
+            ],
+            'staff' => [
+                'page.profile' => 'Profile',
+                'admin.members.list' => 'Members'
             ]
         ];
 
