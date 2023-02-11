@@ -39,7 +39,8 @@ class PageController extends Controller
         $data = [
             'in_guild' => $discord->userInGuild(),
             'minecraft_verified' => !empty($user->minecraft_id),
-            'whitelisted' => !empty($user->whitelisted_at)
+            'whitelisted' => !empty($user->whitelisted_at),
+            'whitelistEnabled' => $this->isWhitelistEnabled()
         ];
         return $this->render('registration', $data);
     }
