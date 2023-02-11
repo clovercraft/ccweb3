@@ -1,0 +1,10 @@
+.navlink {
+    color: $white;
+    text-decoration: none;
+    padding: 10px;
+    width: 100%;
+
+    &:hover {
+        color: $blue;
+    }
+}

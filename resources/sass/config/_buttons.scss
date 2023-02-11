@@ -1,0 +1,16 @@
+.btn-discord {
+    background: #5865f2;
+    color: #FFF;
+    margin: 5px;
+    border-radius: 5px;
+    padding: 1rem;
+
+    i {
+        margin-right: 0.5rem;
+    }
+
+    &:hover {
+        background: #000;
+        color: #5865f2;
+    }
+}

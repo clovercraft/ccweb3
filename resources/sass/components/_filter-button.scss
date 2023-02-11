@@ -1,0 +1,16 @@
+.filter-button {
+    .dropdown-menu a {
+        color: $black;
+        cursor: pointer;
+
+        &:hover,
+        &:active {
+            background: $blue;
+        }
+
+        &.selected {
+            background: $meadow;
+            color: $white;
+        }
+    }
+}

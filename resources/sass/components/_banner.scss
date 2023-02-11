@@ -1,0 +1,56 @@
+.c-banner {
+
+    position: relative;
+    width: 100%;
+    flex-grow: 1;
+    min-height: 300px;
+
+    .background,
+    .overlay,
+    .foreground {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .background {
+        bottom: 0;
+        right: 0;
+        z-index: 10;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+
+    .overlay {
+        bottom: 0;
+        right: 0;
+        z-index: 100;
+        opacity: 0.75;
+        transition: opacity ease-in-out 0.35s;
+    }
+
+    &:hover {
+        cursor: pointer;
+
+        .overlay {
+            opacity: 0.9;
+        }
+    }
+
+    .foreground {
+        z-index: 1000;
+        padding: 3rem 5rem;
+        width: 100%;
+        height: 100%;
+        color: $white;
+
+        h2 {
+            font-size: 2.5rem;
+        }
+
+        p {
+            font-size: 1.5rem;
+        }
+    }
+}

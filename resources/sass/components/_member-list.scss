@@ -1,0 +1,27 @@
+.member-list {
+    #member-filters {
+        margin-bottom: 1rem;
+
+        * {
+            margin-right: 1rem;
+        }
+
+        .form-control {
+            max-width: 50vw;
+        }
+    }
+
+    .member-card {
+        width: 15rem;
+        margin: 0 2rem 1rem 0;
+
+        &:first-of-type {
+            margin-left: 0;
+        }
+
+        &.hidden {
+            display: none;
+            transition: all ease-in-out 0.75s;
+        }
+    }
+}

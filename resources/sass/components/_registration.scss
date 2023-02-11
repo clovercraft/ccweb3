@@ -1,0 +1,20 @@
+.registration-steps {
+    margin-top: 2rem;
+
+    .registration-step {
+        border: 1px solid $gray;
+        padding: 10px 15px 0 10px;
+        border-radius: 20px;
+        margin: 0 1rem;
+        font-size: 1.5rem;
+        color: $gray;
+        opacity: 0.7;
+
+        &.complete {
+            border: 1px solid $meadow;
+            color: $meadow;
+            opacity: 1;
+        }
+    }
+
+}
