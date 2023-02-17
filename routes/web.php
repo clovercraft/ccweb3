@@ -58,5 +58,6 @@ Route::controller(AdminController::class)
                 Route::get('/approveWhitelist/{user}', 'approveWhitelist')->name('approveWhitelist');
                 Route::get('/removeWhitelist/{user}', 'removeWhitelist')->name('removeWhitelist');
                 Route::get('/ban/{user}', 'ban')->name('ban');
+                Route::get('/setRole/{user}/{role}', 'setUserRole')->name('setRole');
             });
     });

@@ -33,6 +33,14 @@ class AdminController extends Controller
         ]);
     }
 
+    public function setUserRole(User $user, string $role)
+    {
+        $role = Role::where('slug', $role)->first();
+        $user->role_id = $role->id;
+        $user->save();
+        return redirect()->route('page.profile', ['user' => $user]);
+    }
+
     public function settings()
     {
         return $this->render('admin.settings', [

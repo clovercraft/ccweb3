@@ -8,6 +8,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Setting;
+use Illuminate\Support\Carbon;
 
 class Controller extends BaseController
 {
@@ -43,5 +44,11 @@ class Controller extends BaseController
     {
         $toggle = Setting::where('key', 'whitelist-relay-enabled')->first();
         return $toggle->value === 'true';
+    }
+
+    protected function makeDisplayDate(string $timestamp): string
+    {
+        $date = new Carbon($timestamp);
+        return $date->format('M d, Y');
     }
 }

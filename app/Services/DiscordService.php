@@ -34,6 +34,29 @@ class DiscordService
         return $response->contains('id', '=', $this->guildId);
     }
 
+    public function getGuildMembership(): ?Collection
+    {
+        $path = sprintf("/users/@me/guilds/%s/member", $this->guildId);
+        $response = $this->callApi($path);
+
+        if ($response === false) {
+            return null;
+        }
+
+        return $response;
+    }
+
+    public function getGuildRoles(): ?Collection
+    {
+        $path = sprintf("/guilds/%s/roles", $this->guildId);
+        $response = $this->callApi($path);
+
+        if ($response === false) {
+            return null;
+        }
+        return $response;
+    }
+
     private function callApi(string $endpoint, array $params = [])
     {
         if (empty($this->token) || empty($this->guildId)) {

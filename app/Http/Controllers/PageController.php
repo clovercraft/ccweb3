@@ -45,16 +45,23 @@ class PageController extends Controller
         return $this->render('registration', $data);
     }
 
-    public function profile(MinecraftService $minecraft, ?User $user = null)
+    public function profile(MinecraftService $minecraft, DiscordService $discord, ?User $user = null)
     {
         if (empty($user)) {
             $user = Auth::user();
         }
 
         $player = $minecraft->getPlayer($user->minecraft_id)->get('username');
+        $member = $discord->getGuildMembership();
+
+        // format dates
+        $member->put('joined_at', $this->makeDisplayDate($member->get('joined_at')));
+        $user->created_at = $this->makeDisplayDate($user->created_at);
+
         return $this->render('profile', [
             'user' => $user,
-            'player' => $player
+            'player' => $player,
+            'member' => $member,
         ]);
     }
 }
