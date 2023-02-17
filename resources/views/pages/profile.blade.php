@@ -29,7 +29,7 @@
                         </table>
                     </div>
                 </div>
-                @can('update', $user)
+                @can('manage', $user)
                     <div class="profile-controls">
                         <table class="table">
                             <thead>
@@ -40,17 +40,23 @@
                             <tbody>
                                 @if ($user->role->slug != 'admin' && $authuser->role->slug == 'admin')
                                     <tr>
-                                        <td><a href="">Change role to Administrator</a></td>
+                                        <td><a
+                                                href="{{ route('admin.members.setRole', ['user' => $user, 'role' => 'admin']) }}">Change
+                                                role to Administrator</a></td>
                                     </tr>
                                 @endif
                                 @if ($user->role->slug != 'staff')
                                     <tr>
-                                        <td><a href="">Change role to Staff</a></td>
+                                        <td><a
+                                                href="{{ route('admin.members.setRole', ['user' => $user, 'role' => 'staff']) }}">Change
+                                                role to Staff</a></td>
                                     </tr>
                                 @endif
                                 @if ($user->role->slug != 'member')
                                     <tr>
-                                        <td><a href="">Change role to Member</a></td>
+                                        <td><a
+                                                href="{{ route('admin.members.setRole', ['user' => $user, 'role' => 'member']) }}">Change
+                                                role to Member</a></td>
                                     </tr>
                                 @endif
                                 <tr>

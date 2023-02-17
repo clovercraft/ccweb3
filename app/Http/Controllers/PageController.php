@@ -54,9 +54,6 @@ class PageController extends Controller
         $player = $minecraft->getPlayer($user->minecraft_id)->get('username');
         $member = $discord->getGuildMembership();
 
-        $roles = $discord->getGuildRoles();
-        dd($roles);
-
         // format dates
         $member->put('joined_at', $this->makeDisplayDate($member->get('joined_at')));
         $user->created_at = $this->makeDisplayDate($user->created_at);
