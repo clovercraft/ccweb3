@@ -38,7 +38,7 @@ class PageController extends Controller
 
         $data = [
             'in_guild' => $discord->userInGuild(),
-            'minecraft_verified' => !empty($user->minecraft_id),
+            'minecraft_verified' => !empty($user->mc_verified_at),
             'whitelisted' => !empty($user->whitelisted_at),
             'whitelistEnabled' => $this->isWhitelistEnabled()
         ];

@@ -24,6 +24,7 @@ class RegistrationController extends ApiController
 
         $player = $minecraft->getPlayer($username);
         $this->user->minecraft_id = $player->get('raw_id');
+        $this->user->mc_verified_at = now();
         $this->user->save();
 
         return $this->next("registration", "verification");
