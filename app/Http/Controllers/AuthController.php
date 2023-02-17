@@ -39,9 +39,13 @@ class AuthController extends Controller
         Session::put('discord_token', $discord->token);
         $user = $this->getUser($discord);
 
+        $member = null;
         if ($user->discord_joined_at == null) {
             $discordService->setOauthToken($discord->token);
             $member = $discordService->getGuildMembership();
+        }
+
+        if ($member !== null) {
             $user->discord_joined_at = $member->get('joined_at');
             $user->save();
         }
