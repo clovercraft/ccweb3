@@ -23,6 +23,11 @@ class DiscordService
         $this->guildId = config('services.discord.guild');
     }
 
+    public function setOauthToken(string $token): void
+    {
+        $this->token = $token;
+    }
+
     public function userInGuild(): bool
     {
         $response = $this->callApi("/users/@me/guilds");
