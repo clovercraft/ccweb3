@@ -37,14 +37,15 @@ class AuthController extends Controller
     public function redirect(DiscordService $discordService)
     {
         $discord = Socialite::driver('discord')->user();
+        Session::put('discord_token', $discord->token);
         $user = $this->getUser($discord);
+
         if ($user->discord_joined_at == null) {
             $member = $discordService->getGuildMembership();
             $user->discord_joined_at = $member->get('joined_at');
             $user->save();
         }
 
-        Session::put('discord_token', $discord->token);
         Auth::login($user);
 
         return $this->getRedirect($user);
