@@ -17,10 +17,12 @@
                                     <td>Status</td>
                                     <td>{{ $user->status }}</td>
                                 </tr>
-                                <tr>
-                                    <td>Member Since</td>
-                                    <td>{{ $member->get('joined_at') }}</td>
-                                </tr>
+                                @if ($user->discord_joined_at !== null)
+                                    <tr>
+                                        <td>Member Since</td>
+                                        <td>{{ $user->discord_joined_at->format('M d, Y') }}</td>
+                                    </tr>
+                                @endif
                                 <tr>
                                     <td>Web Registration on</td>
                                     <td>{{ $user->created_at->format('M d, Y') }}</td>

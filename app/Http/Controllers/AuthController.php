@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Services\DiscordService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -33,10 +34,15 @@ class AuthController extends Controller
             ->redirect();
     }
 
-    public function redirect()
+    public function redirect(DiscordService $discordService)
     {
         $discord = Socialite::driver('discord')->user();
         $user = $this->getUser($discord);
+        if ($user->discord_joined_at == null) {
+            $member = $discordService->getGuildMembership();
+            $user->discord_joined_at = $member->get('joined_at');
+            $user->save();
+        }
 
         Session::put('discord_token', $discord->token);
         Auth::login($user);
