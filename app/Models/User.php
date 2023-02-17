@@ -38,7 +38,9 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'whitelisted_at' => 'datetime'
+        'whitelisted_at' => 'datetime',
+        'mc_verified_at' => 'datetime',
+        'discord_joined_at' => 'datetime'
     ];
 
     public function role(): BelongsTo
