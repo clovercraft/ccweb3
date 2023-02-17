@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Laravel\Socialite\Facades\Socialite;
@@ -62,7 +63,7 @@ class AuthController extends Controller
         $user = new User();
         $user->name = $discord->name;
         $user->discord_id = $discord->id;
-        $user->minecraft_id = '';
+        $user->minecraft_id = Str::uuid();
         $user->avatar = $discord->avatar;
         $user->status = 'new';
 
