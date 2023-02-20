@@ -1,0 +1,91 @@
+<?php
+
+namespace App\Http\Controllers\API;
+
+use App\Models\User;
+use App\Models\Settlement;
+use App\Models\SMP\Settlement as SMPSettlement;
+use Illuminate\Http\Request;
+
+class SettlementController extends ApiController
+{
+    public function list(Request $request)
+    {
+        $settlements = Settlement::all();
+
+        $data = [];
+        foreach ($settlements as $model) {
+            $data[] = (new SMPSettlement($model))->format();
+        }
+        return $this->smpResponse(['data' => $data]);
+    }
+
+    public function get(Settlement $settlement)
+    {
+        if (empty($settlement)) {
+            return $this->smpFailure();
+        }
+
+        $data = (new SMPSettlement($settlement))->format();
+
+        return $this->smpResponse($data);
+    }
+
+    public function create(Request $request)
+    {
+        if (!$request->has('uuid') || !$request->has('name')) {
+            return $this->smpFailure();
+        }
+
+        $user = $this->getSMPUser($request->get('uuid'));
+
+        if (empty($user)) {
+            return $this->smpFailure();
+        }
+
+        if (Settlement::where('name', $request->get('name'))->count() !== 0) {
+            return $this->smpFailure();
+        }
+
+        $settlement = new Settlement();
+        $settlement->name = $request->get('name');
+        $settlement->slug = strtolower(str_replace(' ', '-', $request->get('name')));
+        $settlement->meta = json_encode([]);
+        $settlement->save();
+
+        $user->settlement_id = $settlement->id;
+
+        $data = (new SMPSettlement($settlement))->format();
+        return $this->smpResponse($data);
+    }
+
+    public function update(Settlement $settlement, Request $request)
+    {
+    }
+
+    public function join(Request $request)
+    {
+        if (!$request->has('uuid') || !$request->has('name')) {
+            return $this->smpFailure();
+        }
+
+        $user = $this->getSMPUser($request->get('uuid'));
+
+        if (empty($user)) {
+            return $this->smpFailure();
+        }
+
+        $settlement = Settlement::where('slug', $request->get('name'))->first();
+
+        if (empty($settlement)) {
+            return $this->smpFailure();
+        }
+
+        $user->settlement_id = $settlement->id;
+        $user->save();
+
+        $data = (new SMPSettlement($settlement))->format();
+
+        return $this->smpResponse($data);
+    }
+}
