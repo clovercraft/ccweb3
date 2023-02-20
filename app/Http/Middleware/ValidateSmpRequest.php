@@ -32,8 +32,7 @@ class ValidateSmpRequest
         }
 
         $token = $request->input('denizenkey');
-        $secret = config('services.minecraft.denizensecret');
-
+        $secret = config('services.minecraft.denizen_secret');
         return $token === $secret;
     }
 

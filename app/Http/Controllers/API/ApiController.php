@@ -33,6 +33,11 @@ class ApiController extends Controller
         return response($output);
     }
 
+    protected function smpFailure()
+    {
+        return abort(403);
+    }
+
     protected function next(string $form, string $view, ?array $data = [])
     {
         $html = $this->getFormStep($form, $view, $data);
@@ -52,5 +57,12 @@ class ApiController extends Controller
     {
         $userId = intval($request->input('user'));
         $this->user = User::find($userId);
+    }
+
+    protected function getSMPUser($uuid): User
+    {
+        $uuid = str_replace('-', '', $uuid);
+        $user = User::where('minecraft_id', $uuid)->first();
+        return $user;
     }
 }

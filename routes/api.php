@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\MemberController;
 use App\Http\Controllers\API\RegistrationController;
+use App\Http\Controllers\API\SettlementController;
 use App\Http\Controllers\API\WhitelistController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -44,4 +45,14 @@ Route::controller(WhitelistController::class)
     ->group(function () {
         Route::get('updates', 'getWhitelistUpdate');
         Route::get('all', 'getFullWhitelist');
+    });
+
+Route::controller(SettlementController::class)
+    ->prefix('settlements')
+    ->name('settlements.')
+    ->middleware('smp')
+    ->group(function () {
+        Route::get('list', 'list')->name('list');
+        Route::get('create', 'create')->name('create');
+        Route::get('join', 'join')->name('join');
     });
