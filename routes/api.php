@@ -55,4 +55,5 @@ Route::controller(SettlementController::class)
         Route::get('list', 'list')->name('list');
         Route::get('create', 'create')->name('create');
         Route::get('join', 'join')->name('join');
+        Route::get('citizens', 'citizens')->name('citizens');
     });

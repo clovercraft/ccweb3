@@ -1,13 +1,9 @@
 <div class="container mt-5">
     <h1>Congrats, {{ $authuser->name }}!</h1>
-    <h2>You are now registered on our whitelist</h2>
-    @if ($whitelistEnabled)
-        <p>You should now be able to log in to the Clovercraft SMP, which you can find at mc.clovercraft.gg. If you
-            can't log in, please contact our support staff by opening a ticket on our Discord server.</p>
-    @else
-        <p>You're all set, and when the new season launches you'll automatically get added to our whitelist. Stay tuned
-            for our launch update soon!</p>
-    @endif
+    <h2>You are now a fully registered member of Clovercraft.</h2>
+    <p>Our auto-whitelisting feature isn't functioning as intended right now. To finish getting whitelisted, please post
+        your MC username in the #bug-reports channel on Discord. Please note, you will need to have posted an
+        introduction to be whitelisted.</p>
     <h2>What's Next?</h2>
     <p>You're all set to log on to the server, which you can add to your client at the IP mc.clovercraft.gg. If you'd
         like, here are a few other things to check out!</p>
