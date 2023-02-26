@@ -78,7 +78,7 @@ class SettlementController extends ApiController
             $player = $minecraft->getPlayer($member->minecraft_id);
             $data[] = $player->get('username');
         }
-        return $this->smpResponse($data);
+        return $this->smpResponse(['citizens' => $data]);
     }
 
     public function update(Settlement $settlement, Request $request)
