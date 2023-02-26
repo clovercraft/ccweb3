@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Models\User;
 use App\Models\Settlement;
 use App\Models\SMP\Settlement as SMPSettlement;
+use App\Services\MinecraftService;
 use Illuminate\Http\Request;
 
 class SettlementController extends ApiController
@@ -54,8 +55,29 @@ class SettlementController extends ApiController
         $settlement->save();
 
         $user->settlement_id = $settlement->id;
+        $user->save();
 
         $data = (new SMPSettlement($settlement))->format();
+        return $this->smpResponse($data);
+    }
+
+    public function citizens(MinecraftService $minecraft, Request $request)
+    {
+        if (!$request->has('settlement')) {
+            return $this->smpFailure();
+        }
+
+        $settlement = Settlement::where('slug', $request->get('settlement'))->first();
+
+        if (empty($settlement)) {
+            return $this->smpFailure();
+        }
+
+        $data = [];
+        foreach ($settlement->members as $member) {
+            $player = $minecraft->getPlayer($member->minecraft_id);
+            $data[] = $player->get('username');
+        }
         return $this->smpResponse($data);
     }
 
