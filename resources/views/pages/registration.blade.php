@@ -10,13 +10,23 @@
             </div>
         @else
             <div id="ajaxFormTarget">
-                @if ($whitelisted)
-                    @include('registration.finished')
-                @elseif ($minecraft_verified)
-                    @include('registration.verification')
-                @else
-                    @include('registration.minecraft')
-                @endif
+                <div class="container mt-5">
+                    <h1>Your logged in!</h1>
+                    <h2>We just need a couple more details to set up your account.</h2>
+                    <form method="POST" action="{{ route('validation.profile') }}">
+                        @if (session('error'))
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+                        <label for="input-birthdate">Birthday</label>
+                        <input type="date" id="input-birthdate" name="birthdate" class="form-control mb-2" />
+                        <label for="input-pronouns">Pronouns</label>
+                        <input type="text" id="input-pronouns" name="pronouns" class="form-control mb-2" />
+                        <button class="btn btn-primary" type="submit">Finish</button>
+                    </form>
+                </div>
+
             </div>
         @endif
     </div>

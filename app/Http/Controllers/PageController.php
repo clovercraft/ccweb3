@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Generic\Profile;
 use App\Models\User;
 use App\Services\DiscordService;
-use App\Services\MinecraftService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PageController extends Controller
@@ -34,31 +33,26 @@ class PageController extends Controller
             return redirect()->route('auth.login');
         }
 
-        $user = Auth::user();
-
         $data = [
             'in_guild' => $discord->userInGuild(),
-            'minecraft_verified' => !empty($user->mc_verified_at),
-            'whitelisted' => !empty($user->whitelisted_at),
-            'whitelistEnabled' => $this->isWhitelistEnabled()
         ];
         return $this->render('registration', $data);
     }
 
-    public function profile(MinecraftService $minecraft, DiscordService $discord, ?User $user = null)
+    public function profile(?User $user = null)
     {
         if (empty($user)) {
             $user = Auth::user();
         }
 
-        $player = $minecraft->getPlayer($user->minecraft_id)->get('username');
+        $profile = new Profile($user);
 
         // format dates
         $user->created_at = $this->makeDisplayDate($user->created_at);
 
         return $this->render('profile', [
             'user' => $user,
-            'player' => $player,
+            'profile' => $profile,
         ]);
     }
 }
