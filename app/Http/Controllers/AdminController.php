@@ -38,7 +38,7 @@ class AdminController extends Controller
         $role = Role::where('slug', $role)->first();
         $user->role_id = $role->id;
         $user->save();
-        return redirect()->route('page.profile', ['user' => $user]);
+        return redirect()->route('page.member', ['user' => $user]);
     }
 
     public function settings()

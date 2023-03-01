@@ -42,7 +42,6 @@ class AuthController extends Controller
 
         $member = null;
         if ($user->discord_joined_at == null) {
-            $discordService->setOauthToken($discord->token);
             $member = $discordService->getGuildMembership();
         }
 

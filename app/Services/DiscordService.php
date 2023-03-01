@@ -2,38 +2,29 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use Illuminate\Support\Collection;
+use App\Services\Discord\ApiCall;
+use App\Services\Discord\MessageSearch;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Session;
 
 class DiscordService
 {
-
-    private $api = 'https://discord.com/api';
-    private $token;
     private $guildId;
 
     public function __construct()
     {
-        if (Session::has('discord_token')) {
-            $this->token = Session::get('discord_token');
-        }
         $this->guildId = config('services.discord.guild');
-    }
-
-    public function setOauthToken(string $token): void
-    {
-        $this->token = $token;
     }
 
     public function userInGuild(): bool
     {
-        $response = $this->callApi("/users/@me/guilds");
+        $response = ApiCall::endpoint("users/@me/guilds")
+            ->asUser()
+            ->get();
 
-        if ($response === false) {
-            return false;
+        if (!$response) {
+            return $response;
         }
 
         return $response->contains('id', '=', $this->guildId);
@@ -41,46 +32,47 @@ class DiscordService
 
     public function getGuildMembership(): ?Collection
     {
-        $path = sprintf("/users/@me/guilds/%s/member", $this->guildId);
-        $response = $this->callApi($path);
+        $path = sprintf("users/@me/guilds/%s/member", $this->guildId);
+        $response = ApiCall::endpoint($path)
+            ->asUser()
+            ->get();
 
-        if ($response === false) {
+        if (!$response) {
             return null;
         }
 
         return $response;
+    }
+
+    public function getUserIntro()
+    {
+        $channel = config('services.discord.intro_channel');
+        $user = Auth::user();
+        $author = $user->discord_id;
+        $query = new MessageSearch($channel, $author);
+        return $query->search();
+    }
+
+    public function sendUserVerified(User $user)
+    {
+        $content = "<@" . $user->discord_id . "> has completed web verification, and is now whitelisted.";
+        $channel = config('services.discord.whitelist_channel');
+        ApiCall::endpoint(sprintf("channels/%s/messages", $channel))
+            ->asBot()
+            ->post([
+                'content' => $content
+            ]);
     }
 
     public function getGuildRoles(): ?Collection
     {
-        $path = sprintf("/guilds/%s/roles", $this->guildId);
-        $response = $this->callApi($path);
+        $response = ApiCall::endpoint(sprintf("guilds/%s/roles", $this->guildId))
+            ->asBot()
+            ->get();
 
         if ($response === false) {
             return null;
         }
         return $response;
-    }
-
-    private function callApi(string $endpoint, array $params = [])
-    {
-        if (empty($this->token) || empty($this->guildId)) {
-            return false;
-        }
-
-        $path = $this->api . $endpoint;
-
-        $response = Http::withToken($this->token)->get($path, $params);
-
-        if ($response->status() >= 300) {
-            Log::warning('Discord API call failed', [
-                'endpoint' => $path,
-                'params' => $params,
-                'response' => $response->body()
-            ]);
-            return false;
-        }
-
-        return $response->collect();
     }
 }

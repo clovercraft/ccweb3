@@ -32,10 +32,13 @@ return [
     ],
 
     'discord' => [
-        'guild'         => env('DISCORD_GUILD', ''),
-        'client_id'     => env('DISCORD_CLIENT_ID', ''),
-        'client_secret' => env('DISCORD_CLIENT_SECRET', ''),
-        'redirect'      => env('DISCORD_REDIRECT_URI', ''),
+        'guild'             => env('DISCORD_GUILD', ''),
+        'client_id'         => env('DISCORD_CLIENT_ID', ''),
+        'client_secret'     => env('DISCORD_CLIENT_SECRET', ''),
+        'bot_token'         => env('DISCORD_BOT_TOKEN', ''),
+        'intro_channel'     => '790028088565432340',
+        'whitelist_channel' => '801512347235254283',
+        'redirect'          => env('DISCORD_REDIRECT_URI', ''),
     ],
 
     'minecraft' => [

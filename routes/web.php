@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\ValidationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,6 +32,17 @@ Route::controller(PageController::class)
                 Route::get('profile', 'profile')->name('profile');
                 Route::get('member/{user}', 'profile')->name('member');
             });
+    });
+
+Route::controller(ValidationController::class)
+    ->name('validation.')
+    ->prefix('validate')
+    ->middleware('auth')
+    ->group(function () {
+        Route::post('profile', 'profile')->name('profile');
+        Route::post('minecraft', 'minecraft')->name('minecraft');
+        Route::get('intro', 'intro')->name('intro');
+        Route::get('forceIntro/{user}', 'forceIntro')->name('forceIntro');
     });
 
 Route::controller(AuthController::class)
