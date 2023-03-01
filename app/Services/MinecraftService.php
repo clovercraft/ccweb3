@@ -33,7 +33,7 @@ class MinecraftService
         return $this->loadPlayer($username);
     }
 
-    public function getPlayer(string $username): Collection
+    public function getPlayer(string $username): ?Collection
     {
         $this->loadPlayer($username);
         return $this->player;
