@@ -51,7 +51,7 @@ class SettlementController extends ApiController
         $settlement = new Settlement();
         $settlement->name = $request->get('name');
         $settlement->slug = strtolower(str_replace(' ', '-', $request->get('name')));
-        $settlement->meta = json_encode([]);
+        //$settlement->meta = json_encode([]);
         $settlement->save();
 
         $user->settlement_id = $settlement->id;
