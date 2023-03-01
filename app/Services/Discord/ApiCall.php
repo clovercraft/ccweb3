@@ -104,7 +104,7 @@ class ApiCall
         return Http::withToken($this->token, $this->token_type);
     }
 
-    private function handleResponse($response, $path): ?Collection
+    private function handleResponse($response, $path)
     {
         if ($response->failed()) {
             Log::warning('Discord API call failed', [
