@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Settlement as Settlement;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use App\Services\Discord\ApiCall;
@@ -62,6 +63,15 @@ class DiscordService
             ->post([
                 'content' => $content
             ]);
+    }
+
+    public function setMemberSettlement(User $user, Settlement $settlement)
+    {
+        $role_id = $settlement->discord_role_id;
+        $member_id = $user->discord_id;
+        ApiCall::endpoint(sprintf("guilds/%s/members/%s/roles/%s", $this->guildId, $member_id, $role_id))
+            ->asBot()
+            ->put();
     }
 
     public function getGuildRoles(): ?Collection

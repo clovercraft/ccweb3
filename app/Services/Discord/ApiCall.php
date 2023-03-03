@@ -81,6 +81,15 @@ class ApiCall
         return $this->handleResponse($response, $path);
     }
 
+    public function put()
+    {
+        $this->safetyCheck();
+        $path = $this->buildPath();
+
+        $response = $this->request()->put($path);
+        return $this->handleResponse($response, $path);
+    }
+
     private function safetyCheck(): bool
     {
         if (empty($this->endpoint)) {
