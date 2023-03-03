@@ -31,7 +31,11 @@ class Profile
     {
         $uuid = $this->user->discord_id;
         $member = $this->discord->getGuildMembership($uuid);
-        $this->member = $member->toArray();
+        if (empty($member)) {
+            $this->member = null;
+        } else {
+            $this->member = $member->toArray();
+        }
     }
 
     private function loadMinecraftProfile(): void
@@ -42,6 +46,10 @@ class Profile
         }
 
         $player = $this->minecraft->getPlayer($this->user->minecraft_id);
-        $this->player = $player->toArray();
+        if (empty($player)) {
+            $this->player = null;
+        } else {
+            $this->player = $player->toArray();
+        }
     }
 }
