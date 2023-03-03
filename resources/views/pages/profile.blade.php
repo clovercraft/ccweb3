@@ -43,6 +43,7 @@
                                             @endif
                                             <div class="row">
                                                 <div class="col-8">
+                                                    {{ csrf_field() }}
                                                     <input type="text" name="minecraft_id" class="form-control"
                                                         placeholder="Minecraft Username" />
                                                 </div>
