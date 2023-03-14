@@ -14,6 +14,7 @@
                     <h1>Your logged in!</h1>
                     <h2>We just need a couple more details to set up your account.</h2>
                     <form method="POST" action="{{ route('validation.profile') }}">
+                        {{ csrf_field() }}
                         @if (session('error'))
                             <div class="alert alert-danger">
                                 {{ session('error') }}
