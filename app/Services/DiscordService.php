@@ -56,12 +56,45 @@ class DiscordService
 
     public function sendUserVerified(User $user)
     {
-        $content = "<@" . $user->discord_id . "> has completed web verification, and is now whitelisted.";
+        $this->sendWhitelistLog($user);
+        $this->sendWhitelistNotice($user);
+    }
+
+    private function sendWhitelistNotice(User $user): void
+    {
+        $options = collect([
+            "Congrats, {member}, you've been whitelisted. Happy building!",
+            "Oh snap, {member} just got whitelisted!",
+            "Slay! {member} you've been whitelisted!",
+            "Greetings, {member}, you've been whitelisted. Safe travels!",
+            "Praise Goose! {member} has been whitelisted on the server!",
+            "What's up {member}? You just got whitelisted. Glory to Snoose!",
+            "{member} has been whitelisted! Go forth and craft thy mines!"
+        ]);
+        $template = $options->random();
+        $memberTag = "<@" . $user->discord_id . ">";
+
+        $message = str_replace("{member}", $memberTag, $template);
         $channel = config('services.discord.whitelist_channel');
+        $this->sendDiscordMessage($channel, $message);
+    }
+
+    private function sendWhitelistLog(User $user): void
+    {
+        $minecraft = app(MinecraftService::class);
+        $igname = $minecraft->resolveUsername($user->minecraft_id);
+
+        $message = "<@" . $user->discord_id . "> has completed web verification, and is now whitelisted as `" . $igname . "`.";
+        $channel = config('services.discord.log_channel');
+        $this->sendDiscordMessage($channel, $message);
+    }
+
+    private function sendDiscordMessage(string $channel, string $message): void
+    {
         ApiCall::endpoint(sprintf("channels/%s/messages", $channel))
             ->asBot()
             ->post([
-                'content' => $content
+                'content' => $message
             ]);
     }
 
