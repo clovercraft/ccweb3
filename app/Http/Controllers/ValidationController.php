@@ -92,7 +92,7 @@ class ValidationController extends Controller
             return true;
         }
 
-        if (empty($user->mc_verified_at) || $user->intro_verified === false || empty($user->birthdate) || empty($user->pronouns)) {
+        if (empty($user->mc_verified_at) || $user->intro_verified == false || empty($user->birthdate) || empty($user->pronouns)) {
             return false;
         }
 

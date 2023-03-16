@@ -37,7 +37,8 @@ return [
         'client_secret'     => env('DISCORD_CLIENT_SECRET', ''),
         'bot_token'         => env('DISCORD_BOT_TOKEN', ''),
         'intro_channel'     => '790028088565432340',
-        'whitelist_channel' => '801512347235254283',
+        'whitelist_channel' => '796437321234776085',
+        'log_channel'       => '801512347235254283',
         'redirect'          => env('DISCORD_REDIRECT_URI', ''),
     ],
 
