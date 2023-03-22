@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\Contracts\User as DiscordUser;
 
 class AuthController extends Controller
 {
@@ -67,6 +68,7 @@ class AuthController extends Controller
         $user = User::where('discord_id', $discord->id)->first();
 
         if (!empty($user)) {
+            $this->refreshUser($user, $discord);
             return $user;
         }
 
@@ -102,5 +104,12 @@ class AuthController extends Controller
         }
 
         return redirect()->route($this->defaultRoute);
+    }
+
+    private function refreshUser(User $user, DiscordUser $discord): User
+    {
+        $user->avatar = $discord->avatar;
+        $user->save();
+        return $user;
     }
 }

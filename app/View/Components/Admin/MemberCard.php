@@ -4,6 +4,7 @@ namespace App\View\Components\Admin;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Illuminate\View\Component;
 
@@ -32,7 +33,7 @@ class MemberCard extends Component
         $this->status = $member->status;
         $this->role = $member->role->displayname;
         $this->roleSlug = $member->role->slug;
-        $this->avatar = $member->avatar;
+        $this->avatar = $this->parseAvatar($member->avatar);
     }
 
     /**
@@ -67,5 +68,14 @@ class MemberCard extends Component
         }
 
         return $actions;
+    }
+
+    private function parseAvatar(string $url): string
+    {
+        $alt = asset('img/profile.png');
+        if (Http::get($url)->status() !== 200) {
+            return $alt;
+        }
+        return $url;
     }
 }
