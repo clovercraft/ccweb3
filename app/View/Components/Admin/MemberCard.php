@@ -70,7 +70,7 @@ class MemberCard extends Component
         return $actions;
     }
 
-    private function parseAvatar(string $url = ''): string
+    private function parseAvatar(?string $url = ''): string
     {
         $alt = asset('img/profile.png');
         if (empty($url) || Http::get($url)->status() !== 200) {
