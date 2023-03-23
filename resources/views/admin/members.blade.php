@@ -16,4 +16,13 @@
             @endforeach
         </div>
     </div>
+    <script>
+        // Error handling for missing images
+        document.addEventListener( 'error', (event) => {
+            const target = event.target
+            if( target.className === 'card-img-top' ) {
+                target.setAttribute('src', '/img/profile.png' )
+            }
+        })
+    </script>
 </x-front.layout>
