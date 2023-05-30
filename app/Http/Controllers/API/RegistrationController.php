@@ -11,7 +11,6 @@ class RegistrationController extends ApiController
 {
     public function validateMinecraft(Request $request, MinecraftService $minecraft)
     {
-        $this->loadUser($request);
         if (!$request->has('username')) {
             return $this->failure("You must provide a username.");
         }
@@ -32,7 +31,6 @@ class RegistrationController extends ApiController
 
     public function verification(Request $request)
     {
-        $this->loadUser($request);
         if (!$request->has('birthdate') || !$request->has('pronouns')) {
             return $this->failure("You must provide your birthdate and pronouns.");
         }
