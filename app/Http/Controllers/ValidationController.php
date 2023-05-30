@@ -40,8 +40,8 @@ class ValidationController extends Controller
         $username = $request->get('minecraft_id');
         if (!$minecraft->validateAccount($username)) {
             return redirect()
-                ->with('minecraft_id_error', 'Sorry, we could not validate that Minecraft account name.')
-                ->route('page.profile');
+                ->route('page.profile')
+                ->with('minecraft_id_error', 'Sorry, we could not validate that Minecraft account name.');
         }
 
         $player = $minecraft->getPlayer($username);
@@ -63,8 +63,8 @@ class ValidationController extends Controller
 
         if ($message === false) {
             return redirect()
-                ->with('intro_error', 'Sorry, we could not find an introduction message for your Discord user.')
-                ->route('page.profile');
+                ->route('page.profile')
+                ->with('intro_error', 'Sorry, we could not find an introduction message for your Discord user.');
         }
 
         $user->intro_verified = true;

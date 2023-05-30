@@ -22,6 +22,7 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'discord_id' => fake()->unique()->uuid(),
             'minecraft_id' => fake()->unique()->uuid(),
+            'role_id' => Role::factory()->member()->create(),
             'status' => 'new'
         ];
     }
