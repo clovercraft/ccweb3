@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -88,5 +89,10 @@ class User extends Authenticatable
     public function isStaff(): bool
     {
         return in_array($this->role->slug, [Role::ADMIN, Role::STAFF]);
+    }
+
+    protected function scopeActive(Builder $query): void
+    {
+        $query->where('status', 'active');
     }
 }

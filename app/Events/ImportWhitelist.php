@@ -2,6 +2,8 @@
 
 namespace App\Events;
 
+use App\Models\User;
+use App\Services\MinecraftService;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
@@ -12,16 +14,13 @@ class ImportWhitelist implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $players = [];
-
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(array $players)
+    public function __construct()
     {
-        $this->players = $players;
     }
 
     public function broadcastOn()
@@ -32,5 +31,23 @@ class ImportWhitelist implements ShouldBroadcastNow
     public function broadcastAs()
     {
         return 'importWhitelist';
+    }
+
+    public function broadcastWith()
+    {
+        return [
+            'players' => $this->getActivePlayers(),
+        ];
+    }
+
+    private function getActivePlayers(): array
+    {
+        $players = [];
+        $minecraft = new MinecraftService();
+        $users = User::active()->get();
+        foreach ($users as $user) {
+            $players[] = $minecraft->resolveUsername($user->minecraft_id);
+        }
+        return $players;
     }
 }
