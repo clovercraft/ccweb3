@@ -46,19 +46,19 @@ class SettlementController extends ApiController
             return $this->smpFailure();
         }
 
-        $user = $this->getSMPUser($request->get('uuid'));
+        $user = $this->getSMPUser($uuid);
 
         if (empty($user)) {
             return $this->smpFailure();
         }
 
-        if (Settlement::where('name', $request->get('name'))->count() !== 0) {
+        if (Settlement::where('name', $name)->count() !== 0) {
             return $this->smpFailure();
         }
 
         $settlement = new Settlement();
-        $settlement->name = $request->get('name');
-        $settlement->slug = strtolower(str_replace(' ', '-', $request->get('name')));
+        $settlement->name = $name;
+        $settlement->slug = strtolower(str_replace(' ', '-', $name));
         $settlement->save();
 
         $user->settlement_id = $settlement->id;
@@ -87,10 +87,6 @@ class SettlementController extends ApiController
             $data[] = $player->get('username');
         }
         return $this->smpResponse(['citizens' => $data]);
-    }
-
-    public function update(Settlement $settlement, Request $request)
-    {
     }
 
     public function join(Request $request, DiscordService $discord)
