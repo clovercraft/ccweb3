@@ -3,7 +3,7 @@
 namespace App\Events;
 
 use App\Models\User;
-use App\Services\MinecraftService;
+use App\Facades\Minecraft;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
@@ -43,10 +43,9 @@ class ImportWhitelist implements ShouldBroadcastNow
     private function getActivePlayers(): array
     {
         $players = [];
-        $minecraft = new MinecraftService();
         $users = User::active()->get();
         foreach ($users as $user) {
-            $players[] = $minecraft->resolveUsername($user->minecraft_id);
+            $players[] = Minecraft::resolveUsername($user->minecraft_id);
         }
         return $players;
     }

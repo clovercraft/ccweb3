@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\API;
 
 use App\Events\MemberWhitelistActivated;
-use App\Services\MinecraftService;
+use App\Facades\Minecraft;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
 class RegistrationController extends ApiController
 {
-    public function validateMinecraft(Request $request, MinecraftService $minecraft)
+    public function validateMinecraft(Request $request)
     {
         if (!$request->has('username')) {
             return $this->failure("You must provide a username.");
@@ -17,11 +17,11 @@ class RegistrationController extends ApiController
 
         $username = $request->input('username');
 
-        if (!$minecraft->validateAccount($username)) {
+        if (!Minecraft::validateAccount($username)) {
             return $this->failure("Could not verify Minecraft username. Are you sure you've got the right one?");
         }
 
-        $player = $minecraft->getPlayer($username);
+        $player = Minecraft::getPlayer($username);
         $this->user->minecraft_id = $player->get('raw_id');
         $this->user->mc_verified_at = now();
         $this->user->save();

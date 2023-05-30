@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Collection;
 use App\Services\Discord\ApiCall;
 use App\Services\Discord\MessageSearch;
+use App\Facades\Minecraft;
 use Illuminate\Support\Facades\Auth;
 
 class DiscordService
@@ -81,8 +82,7 @@ class DiscordService
 
     private function sendWhitelistLog(User $user): void
     {
-        $minecraft = app(MinecraftService::class);
-        $igname = $minecraft->resolveUsername($user->minecraft_id);
+        $igname = Minecraft::resolveUsername($user->minecraft_id);
 
         $message = "<@" . $user->discord_id . "> has completed web verification, and is now whitelisted as `" . $igname . "`.";
         $channel = config('services.discord.log_channel');

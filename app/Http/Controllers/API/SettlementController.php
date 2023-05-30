@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Models\User;
 use App\Models\Settlement;
 use App\Models\SMP\Settlement as SMPSettlement;
-use App\Services\DiscordService;
-use App\Services\MinecraftService;
+use App\Facades\Discord;
+use App\Facades\Minecraft;
 use Illuminate\Http\Request;
 
 class SettlementController extends ApiController
@@ -33,7 +32,7 @@ class SettlementController extends ApiController
         return $this->smpResponse($data);
     }
 
-    public function create(Request $request, DiscordService $discord)
+    public function create(Request $request)
     {
         if (!$request->has('uuid') || !$request->has('name')) {
             return $this->smpFailure();
@@ -62,14 +61,14 @@ class SettlementController extends ApiController
         $settlement->save();
 
         $user->settlement_id = $settlement->id;
-        $discord->setMemberSettlement($user, $settlement);
+        Discord::setMemberSettlement($user, $settlement);
         $user->save();
 
         $data = (new SMPSettlement($settlement))->format();
         return $this->smpResponse($data);
     }
 
-    public function citizens(MinecraftService $minecraft, Request $request)
+    public function citizens(Request $request)
     {
         if (!$request->has('settlement')) {
             return $this->smpFailure();
@@ -83,13 +82,13 @@ class SettlementController extends ApiController
 
         $data = [];
         foreach ($settlement->members as $member) {
-            $player = $minecraft->getPlayer($member->minecraft_id);
+            $player = Minecraft::getPlayer($member->minecraft_id);
             $data[] = $player->get('username');
         }
         return $this->smpResponse(['citizens' => $data]);
     }
 
-    public function join(Request $request, DiscordService $discord)
+    public function join(Request $request)
     {
         if (!$request->has('uuid') || !$request->has('name')) {
             return $this->smpFailure();
@@ -108,7 +107,7 @@ class SettlementController extends ApiController
         }
 
         $user->settlement_id = $settlement->id;
-        $discord->setMemberSettlement($user, $settlement);
+        Discord::setMemberSettlement($user, $settlement);
         $user->save();
 
         $data = (new SMPSettlement($settlement))->format();

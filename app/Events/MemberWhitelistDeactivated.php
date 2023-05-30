@@ -3,7 +3,7 @@
 namespace App\Events;
 
 use App\Models\User;
-use App\Services\MinecraftService;
+use App\Facades\Minecraft;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
@@ -38,8 +38,7 @@ class MemberWhitelistDeactivated implements ShouldBroadcastNow
 
     public function broadcastWith()
     {
-        $minecraft = new MinecraftService();
-        $player = $minecraft->getPlayer($this->user->minecraft_id);
+        $player = Minecraft::getPlayer($this->user->minecraft_id);
         return [
             'username' => $player->get('username')
         ];
