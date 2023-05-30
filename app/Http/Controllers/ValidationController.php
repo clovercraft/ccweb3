@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Events\MemberWhitelistActivated;
 use App\Models\User;
-use App\Services\DiscordService;
-use App\Services\MinecraftService;
+use App\Facades\Discord;
+use App\Facades\Minecraft;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -32,19 +32,19 @@ class ValidationController extends Controller
         return redirect()->route('page.profile');
     }
 
-    public function minecraft(Request $request, MinecraftService $minecraft)
+    public function minecraft(Request $request)
     {
         /** @var User $user */
         $user = Auth::user();
 
         $username = $request->get('minecraft_id');
-        if (!$minecraft->validateAccount($username)) {
+        if (!Minecraft::validateAccount($username)) {
             return redirect()
                 ->route('page.profile')
                 ->with('minecraft_id_error', 'Sorry, we could not validate that Minecraft account name.');
         }
 
-        $player = $minecraft->getPlayer($username);
+        $player = Minecraft::getPlayer($username);
         $user->minecraft_id = $player->get('raw_id');
         $user->mc_verified_at = now();
         $user->save();
@@ -54,12 +54,12 @@ class ValidationController extends Controller
         return redirect()->route('page.profile');
     }
 
-    public function intro(DiscordService $discord)
+    public function intro()
     {
         /** @var User $user */
         $user = Auth::user();
 
-        $message = $discord->getUserIntro($user->discord_id);
+        $message = Discord::getUserIntro($user->discord_id);
 
         if ($message === false) {
             return redirect()
@@ -100,7 +100,6 @@ class ValidationController extends Controller
         $user->whitelisted_at = now();
         $user->save();
         MemberWhitelistActivated::dispatch($user);
-        $discord = new DiscordService();
-        $discord->sendUserVerified($user);
+        Discord::sendUserVerified($user);
     }
 }

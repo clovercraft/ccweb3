@@ -13,6 +13,14 @@ class ApiController extends Controller
     /** @var User $user */
     protected $user;
 
+    public function __construct()
+    {
+        if (session()->has('user_id')) {
+            $uid = session()->get('user_id');
+            $this->user = User::find(intval($uid));
+        }
+    }
+
     protected function failure(string $message)
     {
         return response()->json([
@@ -51,12 +59,6 @@ class ApiController extends Controller
     {
         $data['authuser'] =  $this->user;
         return view("$form.$step", $data)->render();
-    }
-
-    protected function loadUser(Request $request): void
-    {
-        $userId = intval($request->input('user'));
-        $this->user = User::find($userId);
     }
 
     protected function getSMPUser($uuid): User

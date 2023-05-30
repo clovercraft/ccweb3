@@ -8,7 +8,7 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use App\Services\MinecraftService;
+use App\Facades\Minecraft;
 
 class MemberWhitelistActivated implements ShouldBroadcastNow
 {
@@ -43,8 +43,7 @@ class MemberWhitelistActivated implements ShouldBroadcastNow
 
     public function broadcastWith()
     {
-        $minecraft = new MinecraftService();
-        $player = $minecraft->getPlayer($this->user->minecraft_id);
+        $player = Minecraft::resolveUsername($this->user->minecraft_id);
         return [
             'username' => $player->get('username')
         ];

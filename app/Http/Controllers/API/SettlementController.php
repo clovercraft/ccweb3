@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Models\User;
 use App\Models\Settlement;
 use App\Models\SMP\Settlement as SMPSettlement;
-use App\Services\DiscordService;
-use App\Services\MinecraftService;
+use App\Facades\Discord;
+use App\Facades\Minecraft;
 use Illuminate\Http\Request;
 
 class SettlementController extends ApiController
@@ -33,36 +32,43 @@ class SettlementController extends ApiController
         return $this->smpResponse($data);
     }
 
-    public function create(Request $request, DiscordService $discord)
+    public function create(Request $request)
     {
         if (!$request->has('uuid') || !$request->has('name')) {
             return $this->smpFailure();
         }
 
-        $user = $this->getSMPUser($request->get('uuid'));
+        $uuid = $request->get('uuid');
+        $name = $request->get('name');
+
+        if (preg_match('/[^a-zA-Z]+/', $name) !== false) {
+            return $this->smpFailure();
+        }
+
+        $user = $this->getSMPUser($uuid);
 
         if (empty($user)) {
             return $this->smpFailure();
         }
 
-        if (Settlement::where('name', $request->get('name'))->count() !== 0) {
+        if (Settlement::where('name', $name)->count() !== 0) {
             return $this->smpFailure();
         }
 
         $settlement = new Settlement();
-        $settlement->name = $request->get('name');
-        $settlement->slug = strtolower(str_replace(' ', '-', $request->get('name')));
+        $settlement->name = $name;
+        $settlement->slug = strtolower(str_replace(' ', '-', $name));
         $settlement->save();
 
         $user->settlement_id = $settlement->id;
-        $discord->setMemberSettlement($user, $settlement);
+        Discord::setMemberSettlement($user, $settlement);
         $user->save();
 
         $data = (new SMPSettlement($settlement))->format();
         return $this->smpResponse($data);
     }
 
-    public function citizens(MinecraftService $minecraft, Request $request)
+    public function citizens(Request $request)
     {
         if (!$request->has('settlement')) {
             return $this->smpFailure();
@@ -76,17 +82,13 @@ class SettlementController extends ApiController
 
         $data = [];
         foreach ($settlement->members as $member) {
-            $player = $minecraft->getPlayer($member->minecraft_id);
+            $player = Minecraft::getPlayer($member->minecraft_id);
             $data[] = $player->get('username');
         }
         return $this->smpResponse(['citizens' => $data]);
     }
 
-    public function update(Settlement $settlement, Request $request)
-    {
-    }
-
-    public function join(Request $request, DiscordService $discord)
+    public function join(Request $request)
     {
         if (!$request->has('uuid') || !$request->has('name')) {
             return $this->smpFailure();
@@ -105,7 +107,7 @@ class SettlementController extends ApiController
         }
 
         $user->settlement_id = $settlement->id;
-        $discord->setMemberSettlement($user, $settlement);
+        Discord::setMemberSettlement($user, $settlement);
         $user->save();
 
         $data = (new SMPSettlement($settlement))->format();
