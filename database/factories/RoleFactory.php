@@ -22,4 +22,12 @@ class RoleFactory extends Factory
             'displayname' => $name
         ];
     }
+
+    public function member()
+    {
+        return $this->state(fn (array $attributes) => [
+            'slug' => 'member',
+            'displayname' => 'Member'
+        ]);
+    }
 }
