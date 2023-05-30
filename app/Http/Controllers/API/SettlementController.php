@@ -39,6 +39,13 @@ class SettlementController extends ApiController
             return $this->smpFailure();
         }
 
+        $uuid = $request->get('uuid');
+        $name = $request->get('name');
+
+        if (preg_match('/[^a-zA-Z]+/', $name) !== false) {
+            return $this->smpFailure();
+        }
+
         $user = $this->getSMPUser($request->get('uuid'));
 
         if (empty($user)) {
