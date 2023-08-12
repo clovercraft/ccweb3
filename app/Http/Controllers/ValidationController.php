@@ -40,8 +40,8 @@ class ValidationController extends Controller
         $username = $request->get('minecraft_id');
         if (!Minecraft::validateAccount($username)) {
             return redirect()
-                ->route('page.profile')
-                ->with('minecraft_id_error', 'Sorry, we could not validate that Minecraft account name.');
+                ->with('minecraft_id_error', 'Sorry, we could not validate that Minecraft account name.')
+                ->route('page.profile');
         }
 
         $player = Minecraft::getPlayer($username);
